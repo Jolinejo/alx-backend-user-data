@@ -21,6 +21,25 @@ if auth_type == "auth":
     auth = Auth()
 
 
+@app.before_request
+def filtering():
+    """ filtering of reqs
+    """
+    if auth is None:
+        pass
+
+    listi = ['/api/v1/status/',
+             '/api/v1/unauthorized/',
+             '/api/v1/forbidden/']
+    path_in = auth.require_auth(request.path, listi)
+    if path_in is True:
+        pass
+    if auth.authorization_header(request) is None:
+        abort(401)
+    if auth.current_user(request) is None:
+        abort(403)
+
+
 @app.errorhandler(404)
 def not_found(error) -> str:
     """ Not found handler
@@ -40,25 +59,6 @@ def forbidden(error) -> str:
     """ Forbidden
     """
     return jsonify({"error": "Forbidden"}), 403
-
-@app.before_request
-def filtering():
-    """ filtering of reqs
-    """
-    if auth is None:
-        pass
-
-    listi = ['/api/v1/status/',
-            '/api/v1/unauthorized/',
-            '/api/v1/forbidden/']
-    path_in = auth.require_auth(request.path, listi)
-    print(path_in)
-    if path_in is True:
-        pass
-    if auth.authorization_header(request) is None:
-        abort(401)
-    if auth.current_user(request) is None:
-        abort(403)
 
 
 if __name__ == "__main__":
