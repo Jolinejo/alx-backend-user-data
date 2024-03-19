@@ -31,9 +31,8 @@ def filtering():
     path_in = auth.require_auth(request.path, ['/api/v1/status/',
                                                '/api/v1/unauthorized/',
                                                '/api/v1/forbidden/'])
-    print(request.path)
     if path_in is True:
-        return
+        pass
     if auth.authorization_header(request) is None:
         abort(401)
     if auth.current_user(request) is None:
