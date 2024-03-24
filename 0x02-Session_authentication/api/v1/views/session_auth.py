@@ -22,11 +22,10 @@ def login():
     listi = User.search(attr)
     if not listi:
         return jsonify({"error": "no user found for this email"}), 404
-    print(listi[0])
     if listi[0].is_valid_password(pwd) is False:
         return jsonify({"error": "wrong password"}), 401
     from api.v1.app import auth
-    session_id = auth.create_session(listi[0])
+    session_id = auth.create_session(listi[0].id)
     out = jsonify(listi[0].to_json())
     cookie_name = os.getenv('SESSION_NAME')
     out.set_cookie(cookie_name, session_id)
