@@ -53,7 +53,7 @@ class DB:
         takes in arbitrary keyword arguments and
         returns the first row found in the users
         """
-        user = self.__session.query(User).filter_by(**kwargs).first()
+        user = self._session.query(User).filter_by(**kwargs).first()
         if user is None:
             raise NoResultFound
         return user
