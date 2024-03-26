@@ -37,7 +37,6 @@ class DB:
         save the user to the database
         """
         user = User(email=email, hashed_password=hashed_password)
-        self._session.add(user)
-        self._session.commit()
+        self.__session.add(user)
+        self.__session.commit()
         return user
-
