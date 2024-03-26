@@ -2,7 +2,7 @@
 """
 Route module for the API
 """
-from flask import Flask, Response, jsonify, abort, request
+from flask import Flask, redirect, Response, jsonify, abort, request
 from auth import Auth
 
 
@@ -40,6 +40,16 @@ def login():
     out = jsonify({"email": email, "message": "logged in"})
     out.set_cookie("session_id", session_id)
     return out
+
+
+@app.route("/sessions", methods=['DELETE'])
+def logout():
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
+    if user is None:
+        abort(403)
+    AUTH.destroy_session(user.id)
+    return redirect("/")
 
 
 if __name__ == "__main__":
