@@ -72,10 +72,13 @@ def get_reset_password_token():
 
 
 @app.route("/reset_password", methods=['PUT'])
-def update_password():
-    email = request.form["email"]
-    reset_token = request.form["reset_token"]
-    new_password = request.form["new_password"]
+def update_password() -> Response:
+    """
+    Update the password. If the token is invalid, catch the exception
+    """
+    email = request.form.get("email")
+    reset_token = request.form.get("reset_token")
+    new_password = request.form.get("new_password")
     try:
         AUTH.update_password(reset_token, new_password)
         return jsonify({"email": email, "message": "Password updated"}), 200
